@@ -1,8 +1,7 @@
 FROM python:3.8
 # install the notebook package
 RUN pip install --no-cache --upgrade pip && \
-    pip install --no-cache notebook && \
-    pip install -r requirements.txt
+    pip install --no-cache notebook
 
 # create user with a home directory
 ARG NB_USER
@@ -15,6 +14,11 @@ RUN adduser --disabled-password \
     --uid ${NB_UID} \
     ${NB_USER}
 WORKDIR ${HOME}
+
+COPY ./requirements.txt ${HOME}/requirements.txt
+
+RUN pip install -r requirements.txt
+
 USER ${USER}
 
 
