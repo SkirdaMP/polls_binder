@@ -24,4 +24,6 @@ USER ${USER}
 
 FROM postgres
 
+ENV POSTGRES_PASSWORD = postgres
+
 ADD database/create_db.sql /docker-entrypoint-initdb.d
