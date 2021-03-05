@@ -20,12 +20,3 @@ COPY ./requirements.txt ${HOME}/requirements.txt
 RUN pip install -r requirements.txt
 
 USER ${USER}
-
-
-FROM postgres:12
-
-ENV POSTGRES_PASSWORD = postgres \
-    POSTGRES_USER = postgres \
-    POSTGRES_DB = polls
-
-ADD database/create_db.sql /docker-entrypoint-initdb.d
