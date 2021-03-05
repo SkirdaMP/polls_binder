@@ -21,7 +21,7 @@ WORKDIR ${HOME}
 
 USER ${USER}
 
-FROM postgres: 12
+FROM postgres:12
 
 ENV POSTGRES_PASSWORD=postgres \
     POSTGRES_USER=postgres
