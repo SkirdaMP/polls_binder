@@ -9,16 +9,19 @@ ARG NB_UID
 ENV USER ${NB_USER}
 ENV HOME /home/${NB_USER}
 
+COPY . ${HOME}
+
+RUN pip install -r ${HOME}/requirements.txt
+
 RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
     ${NB_USER}
 WORKDIR ${HOME}
 
-COPY ./requirements.txt ${HOME}/requirements.txt
-
-RUN pip install -r requirements.txt
-
-COPY . ${HOME}
-
 USER ${USER}
+
+FROM postgres: 12
+
+ENV POSTGRES_PASSWORD=postgres \
+    POSTGRES_USER=postgres
