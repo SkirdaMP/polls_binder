@@ -1,6 +1,6 @@
 from datetime import datetime
 import random
-from typing import List
+from typing import List, Dict
 
 import pytz
 
@@ -8,6 +8,7 @@ from connection_pool import get_connection
 from database import database
 from models.option import Option
 from models.poll import Poll
+from utils import from_list_to_dict_option
 
 
 MENU_PROMPT = """-- Menu --
@@ -42,9 +43,11 @@ def prompt_vote_poll():
     poll_id = int(input("Enter poll would you like to vote on: "))
     poll = Poll.get(poll_id)
     if poll:
-        _print_poll_options(poll.options)
+        options = from_list_to_dict_option(poll.options)
+        _print_poll_options(options)
 
-        option_id = int(input("Enter option you'd like to vote for: "))
+        option_num = input("Enter option you'd like to vote for: ")
+        option_id = options.get(option_num).id
         username = input("Enter the username you'd like to vote as: ")
 
         Option.get(option_id).vote(username)
@@ -52,9 +55,9 @@ def prompt_vote_poll():
         print("Haven't polls yet.")
 
 
-def _print_poll_options(options: List[Option]):
-    for option in options:
-        print(f"{option.id}: {option.text}")
+def _print_poll_options(options: Dict[str, Option]):
+    for key, option in options.items():
+        print(f"{key}: {option.text}")
 
 
 def _print_votes_for_options(options: List[Option]):
@@ -90,9 +93,11 @@ def show_poll_votes():
 def randomize_poll_winner():
     poll_id = int(input("Enter poll you'd like to pick a winner for: "))
     poll = Poll.get(poll_id)
-    _print_poll_options(poll.options)
+    options = from_list_to_dict_option(poll.options)
+    _print_poll_options(options)
 
-    option_id = int(input("Enter which is the winning option, we'll pick a random winner from voters: "))
+    option_num = input("Enter which is the winning option, we'll pick a random winner from voters: ")
+    option_id = options.get(option_num).id
     votes = Option.get(option_id).votes
     if votes:
         winner = random.choice(votes)
