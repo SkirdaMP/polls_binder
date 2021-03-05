@@ -19,4 +19,6 @@ COPY ./requirements.txt ${HOME}/requirements.txt
 
 RUN pip install -r requirements.txt
 
+COPY . ${HOME}
+
 USER ${USER}
